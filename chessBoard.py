@@ -43,3 +43,29 @@ plt.ylabel("row")
 plt.title("heatmap")
 plt.pcolor(wheatCount8x8_copy)
 plt.show()
+
+row1, row2 = np.vsplit(wheatCount8x8_copy, [4])
+print('row1:',row1.shape)
+print('row2:',row2.shape)
+multiplyRows = row1 *row2
+print('multiplyRows:',multiplyRows)
+
+n_squares = 4
+small_board_ndarray = np.array([1])
+for _ in range(n_squares - 1):
+    small_board_ndarray = np.append(small_board_ndarray, 2*small_board_ndarray[-1])
+print("4マスの板に小麦を並べる（ndarray）：{}".format(small_board_ndarray))
+
+n_squares = 4
+indices_of_squares = np.arange(n_squares)
+small_board_ndarray = 2**indices_of_squares
+print("4マスの板に小麦を並べる（ndarray）：{}".format(small_board_ndarray))
+
+a = np.array([0,1,2])
+
+#ブロードキャストを使わない場合
+b = np.array([5,5,5])
+print(a + b)  # Out: [5,6,7]
+
+#ブロードキャストを使う場合
+print(a + 5)  # Out: [5,6,7]　※5が自動的に(1,3)の行列([5,5,5])に変換されている
