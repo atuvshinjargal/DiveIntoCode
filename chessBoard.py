@@ -50,22 +50,63 @@ print('row2:',row2.shape)
 multiplyRows = row1 *row2
 print('multiplyRows:',multiplyRows)
 
-n_squares = 4
-small_board_ndarray = np.array([1])
-for _ in range(n_squares - 1):
-    small_board_ndarray = np.append(small_board_ndarray, 2*small_board_ndarray[-1])
-print("4マスの板に小麦を並べる（ndarray）：{}".format(small_board_ndarray))
+def calculate_wheat_chess_boardcast(n_board, m_board):
+    """
+    a function that returns an ndarray that describes the number of wheat on the chess board of n × m squares
+    using broadcast method
+    Parameters 
+    -----------------------
+    n_board : int 
+        lenght of the board
+    m_board : int 
+        width of the board
+    
+    Returns
+    -----------------------
+    board_array: ndarray
+        wheats on the board array
+    """
+    n_squares = n_board * m_board
+    
+    indices_of_squares = np.arange(n_squares).astype(np.uint64)
+    board_ndarray = 2**indices_of_squares
+    #board_array = np.array(board_list)
+    board_array = board_ndarray.reshape(n_board, m_board)
+    return board_array
 
-n_squares = 4
-indices_of_squares = np.arange(n_squares)
-small_board_ndarray = 2**indices_of_squares
-print("4マスの板に小麦を並べる（ndarray）：{}".format(small_board_ndarray))
+board_array = calculate_wheat_chess_boardcast(8,8) 
+n_wheats = np.sum(board_array)
+print("number of wheats on the {} x {} board: {}".format(8, 8, n_wheats))
 
-a = np.array([0,1,2])
 
-#ブロードキャストを使わない場合
-b = np.array([5,5,5])
-print(a + b)  # Out: [5,6,7]
+def calculate_wheat_chess_ndarray(n_board, m_board):
+    """
+    a function that returns an ndarray that describes the number of wheat on the chess board of n × m squares
+    using np.append array
+    Parameters 
+    -----------------------
+    n_board : int 
+        lenght of the board
+    m_board : int 
+        width of the board
+    
+    Returns
+    -----------------------
+    board_array: ndarray
+        wheats on the board array
+    """
+    n_squares = 8 * 8
+    board_ndarray = np.array([1]).astype(np.uint64)
+    print("board ndarray:", board_ndarray)
+    for _ in range(n_squares - 1):
+      board_ndarray = np.append(board_ndarray, 2*board_ndarray[-1])
+    print(board_ndarray)
+    board_array = board_ndarray.reshape(8, 8)
+    
+    return board_array
 
-#ブロードキャストを使う場合
-print(a + 5)  # Out: [5,6,7]　※5が自動的に(1,3)の行列([5,5,5])に変換されている
+
+board_array = calculate_wheat_chess_ndarray(8,8) 
+print(board_array)
+n_wheats = np.sum(board_array)
+print("number of wheats on the {} x {} board: {}".format(8, 8, n_wheats))
