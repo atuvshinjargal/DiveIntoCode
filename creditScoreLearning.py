@@ -24,7 +24,7 @@ def Encoder(df):
         except:
             print('Error encoding '+feature)
     return df
-########### Problem 1 ################
+
 # Confirmation of competition contents
 
 '''
@@ -43,13 +43,11 @@ What kind of index value will be evaluated for submitted items?
 
 '''
 
-
-########### Problem 2 ################
 # Learning and verification
 
 # data preparation
-application_train = pd.read_csv('application_train.csv')
-application_test = pd.read_csv('application_test.csv')
+application_train = pd.read_csv('../data/application_train.csv')
+application_test = pd.read_csv('../data/application_test.csv')
 print("Number of samples in application_train:{}".format(len(application_train)))
 print("Number of features in application_train:{}".format(len(application_train.columns)))
 print("Number of samples in application_test:{}".format(len(application_test)))
@@ -80,12 +78,11 @@ scaler.fit(application_train)
 X_train = scaler.transform(application_train)
 X_test = scaler.transform(application_test)
 
-x_tr, x_val, y_tr, y_val = train_test_split(X_train, y_train, random_state=123)
+x_tr, x_val, y_tr, y_val = train_test_split(X_train, y_train, random_state=42)
 
-lr = LogisticRegression(C=0.0001)
+lr = LogisticRegression(C=1)
 lr.fit(x_tr, y_tr)
 
-########### Problem 3 ################
 # Estimate for test data
 
 y_test_pred = lr.predict_proba(x_val)[:, 1]
@@ -95,13 +92,10 @@ y_test_pred = lr.predict_proba(X_test)[:, 1]
 data = application_test[["SK_ID_CURR"]]
 data['TARGET'] = y_test_pred.tolist()
 data.to_csv('submission.csv', index=False)
-print(data)
 
-print("BEST SCORE: 0.64511  V2")
-########### Problem 4 ################
 # Feature engineering
-application_train = pd.read_csv('application_train.csv')
-application_test = pd.read_csv('application_test.csv')
+application_train = pd.read_csv('../data/application_train.csv')
+application_test = pd.read_csv('../data/application_test.csv')
 print("Number of samples in application_train:{}".format(len(application_train)))
 print("Number of features in application_train:{}".format(len(application_train.columns)))
 print("Number of samples in application_test:{}".format(len(application_test)))
@@ -126,9 +120,9 @@ y_ext = ext_data['TARGET']
 X_train = ext_data.drop(columns=['TARGET'])
 X_test = application_test[X_train.columns]
 
-print(X_train.columns)
+#print(X_train.columns)
 
-imputer = SimpleImputer(strategy="median")
+imputer = SimpleImputer(strategy="mean")
 X_train = imputer.fit_transform(X_train)
 X_test = imputer.fit_transform(X_test)
 
@@ -138,9 +132,9 @@ train = scaler.transform(X_train)
 test = scaler.transform(X_test)
 
 
-x_tr, x_val, y_tr, y_val = train_test_split(train, y_ext, random_state=123)
+x_tr, x_val, y_tr, y_val = train_test_split(train, y_ext, random_state=42)
 
-log_reg = LogisticRegression(C=0.0001)
+log_reg = LogisticRegression(C=1)
 log_reg.fit(x_tr, y_tr)
 
 log_reg_pred = log_reg.predict_proba(x_val)[:, 1]
@@ -151,6 +145,3 @@ y_test_pred = log_reg.predict_proba(X_test)[:, 1]
 data = application_test[["SK_ID_CURR"]]
 data['TARGET'] = y_test_pred.tolist()
 data.to_csv('submission.csv', index=False)
-print(data)
-
-print("BEST SCORE: 0.69758  V3")
