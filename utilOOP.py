@@ -119,8 +119,8 @@ class arithmetic():
         X : float or int
             received argument
         """
-        self.check_type(X)
-        self.value += X
+        if (self.check_type(X)):
+            self.value += X
     def sub(self, X):
         """
         Substrate the received argument to self.value
@@ -130,8 +130,8 @@ class arithmetic():
         X : float or int
             received argument
         """
-        self.check_type(X)
-        self.value -= X
+        if (self.check_type(X)):
+            self.value -= X
     def mul(self, X):
         """
         Multiply the received argument by self.value
@@ -141,8 +141,8 @@ class arithmetic():
         X : float or int
             received argument
         """
-        self.check_type(X)
-        self.value *= X
+        if (self.check_type(X)):
+            self.value *= X
     def div(self, X):
         """
         Divide the received argument by self.value
@@ -152,8 +152,8 @@ class arithmetic():
         X : float or int
             received argument
         """
-        self.check_type(X)
-        self.value /= X
+        if (self.check_type(X)):
+            self.value /= X
     def check_type(self, X):
         """
         Check input variable type. If it is not int or float then raise error.
@@ -164,7 +164,12 @@ class arithmetic():
             received argument
         """
         if not isinstance(X, (int, float)):
-            raise Exception("Sorry, value must be int or float. The variable type is: {}".format(type(X)))
+            try:
+                raise ValueError("Sorry, value must be int or float.")
+            except ValueError as ex:
+                print(ex.args)
+            return  False
+        return True
 
     
 
