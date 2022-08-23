@@ -30,16 +30,16 @@ def Encoder(df):
 '''
 What to learn and what to predict?
     from features, i.e. gender, education, age, income type, classify repayment abilities. (if 0 can't pay, 1 can pay)
+What kind of index value will be evaluated for submitted items?
+        Probability
 What kind of file to create and submit to Kaggle?
     Submissions are evaluated on area under the ROC curve between the predicted probability and the observed target.
     For each SK_ID_CURR in the test set, you must predict a probability for the TARGET variable. 
     The file should contain a header and have the following format:
         SK_ID_CURR,TARGET
         100001,0.1
-        100005,0.9
-        100013,0.2 etc.
-What kind of index value will be evaluated for submitted items?
-        Probability
+        100004,0.5
+        100102,0.7 ...
 
 '''
 
