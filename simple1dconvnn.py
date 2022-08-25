@@ -131,7 +131,7 @@ class GetMiniBatch:
         shuffle_index = np.random.permutation(np.arange(X.shape[0]))
         self._X = X[shuffle_index]
         self._y = y[shuffle_index]
-        self._stop = np.ceil(X.shape[0]/self.batch_size).astype(np.int)
+        self._stop = np.ceil(X.shape[0]/self.batch_size).astype(np.int64)
     def __len__(self):
         return self._stop
     def __getitem__(self,item):
