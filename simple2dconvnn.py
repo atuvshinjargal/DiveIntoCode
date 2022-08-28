@@ -200,7 +200,7 @@ class GetMiniBatch:
         shuffle_index = np.random.permutation(np.arange(X.shape[0]))
         self._X = X[shuffle_index]
         self._y = y[shuffle_index]
-        self._stop = np.ceil(X.shape[0]/self.batch_size).astype(np.int64)
+        self._stop = np.ceil(X.shape[0]/self.batch_size).astype(np.int)
     def __len__(self):
         return self._stop
     def __getitem__(self,item):
@@ -218,7 +218,7 @@ class GetMiniBatch:
         self._counter += 1
         return self._X[p0:p1], self._y[p0:p1]
 
-################# 1 ################
+################# Problem 1 ################
 
 class SimpleConv2d():
     """
@@ -333,7 +333,7 @@ class SimpleConv2d():
 
         return dZ   
 
-################# 4 ######################
+################# Problem 4 ######################
 # Creation of maximum pooling layer
 class MaxPool2D():
     '''
@@ -393,7 +393,7 @@ class MaxPool2D():
                                 tmp[i] = 0
                         dP[n,ch,row*PS:row*PS+PS,col*PS:col*PS+PS] = tmp.reshape(PS,PS)
         return dP
-############### 5 ################
+############### Problem 5 ################
 # (Advance task) Creating an average pooling
 class AvgPool2D():
     '''
@@ -447,7 +447,7 @@ class AvgPool2D():
                                 tmp[i] = dA[n,ch,row,col]/(PS*PS)
                         dP[n,ch,row*PS:row*PS+PS,col*PS:col*PS+PS] = tmp.reshape(PS,PS)
         return dP
-############### 6 ##################
+############### Problem 6 ##################
 # Smoothing
 class flatten():
     def __init__(self):
@@ -458,7 +458,7 @@ class flatten():
     def backward(self, X):
         return X.reshape(self.shape)
 
-############## 7 ###################
+############## Problem 7 ###################
 class Scratch2dCNNClassifier:
     """
     2d conv layer 
@@ -583,7 +583,7 @@ y_val_one_hot = enc.fit_transform(y_val.reshape(-1,1))
 print("Train dataset:", X_train.shape) # (48000, 784)
 print("Validation dataset:", X_val.shape) # (12000, 784)
 
-############### 2 & 3 ################
+############### Problem 2 & 3 ################
 # Experiment of a two-dimensional convolution layer with a small array
 def output_shape2d(H,W,PH,PW,FH,FW,SH,SW):
     OH = (H +2*PH -FH)/SH +1
@@ -669,19 +669,19 @@ print("dZ:",dZ)
 print("dW:", dw)
 print("db:", db)
 
-################ 4 test ##################
+################ Problem 4 test ##################
 test_data = np.random.randint(0,9,36).reshape(1,1,6,6)
 maxpooling = MaxPool2D(P=2)
 pool_forward = maxpooling.forward(test_data)
 print("test data:", test_data)
 print("Maxpooling forward:", pool_forward)
-################ 5 test ##################
+################ Problem 5 test ##################
 test_data = np.random.randint(0,9,36).reshape(1,1,6,6)
 avgpooling = AvgPool2D(P=2)
 pool_forward = avgpooling.forward(test_data)
 print("test data:", test_data)
 print("Avgpooling forward:", pool_forward)
-################ 6 test ##################
+################ Problem 6 test ##################
 test_data = np.zeros([10,2,5,5])
 flat = flatten()
 flat_forward = flat.forward(test_data)
@@ -689,7 +689,7 @@ flat_backward = flat.backward(flat_forward)
 print("test data shape:", test_data.shape)
 print("Flat forward shape:", flat_forward.shape)
 print("Flat backward shape:", flat_backward.shape)
-############### 7 ###################
+############### Problem 7 ###################
 # Learning and estimation
 
 NN = {0: FC(7840, 400, HeInitializer(), AdaGrad(0.01), Tanh()),
@@ -726,7 +726,7 @@ LeNet.fit(X_train[0:1000], y_train_one_hot[0:1000])
 y_pred_lenet = LeNet.predict(X_val[0:500])
 acc_lenet = accuracy_score(y_val[0:500], y_pred_lenet)
 print("Accuracy:", acc_lenet)
-############## 10 ##############
+############## Problem 10 ##############
 # Calculation of output size and number of parameters
 print("Parameters in general are weights that are learnt during training. Parameters can calculate using following formula:\n\
     (filter width*filter height*number of filter in the previous layer +1)* number of filters")

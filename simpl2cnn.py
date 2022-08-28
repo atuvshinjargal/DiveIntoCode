@@ -5,8 +5,8 @@ from keras.datasets import mnist
 from sklearn.preprocessing import OneHotEncoder
 
 (X_train, t_train), (X_test, t_test) = mnist.load_data()
-X_train = X_train.astype(np.float)
-X_test = X_test.astype(np.float)
+X_train = X_train.astype(np.float64)
+X_test = X_test.astype(np.float64)
 X_train /= 255
 X_test /= 255
 enc = OneHotEncoder(handle_unknown="ignore", sparse=False)
