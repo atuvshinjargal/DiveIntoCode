@@ -585,16 +585,14 @@ print("Validation dataset:", X_val.shape) # (12000, 784)
 
 ############### Problem 2 & 3 ################
 # Experiment of a two-dimensional convolution layer with a small array
-def output_shape2d(H,W,PH,PW,FH,FW,SH,SW):
-    OH = (H +2*PH -FH)/SH +1
-    OW = (W +2*PW -FW)/SW +1
-    return int(OH),int(OW)
 
+# (1,1,4,4)
 x = np.array([[[[ 1,  2,  3,  4],
                 [ 5,  6,  7,  8],
                 [ 9, 10, 11, 12],
                 [13, 14, 15, 16]]]])
 
+# (2,3,3)
 w = np.array([[[[ 0.,  0.,  0.],
                [ 0.,  1.,  0.],
                [ 0., -1.,  0.]],
@@ -603,71 +601,21 @@ w = np.array([[[[ 0.,  0.,  0.],
                [ 0., -1.,  1.],
                [ 0.,  0.,  0.]]]])
 
-#w = np.array([[[[ 0.,  0.,  0.],
-#               [ 0.,  1.,  0.],
-#               [ 0., -1.,  0.]]]])
+simple_conv_2d = SimpleConv2d(F=2, C=1, FH=3, FW=3, P=0, S=1,initializer=SimpleInitializerConv2d(),optimizer=SGD(0.01),activation=ReLU())
+simple_conv_2d.W = w
+print(x.shape)
+print(w.shape)
+A = simple_conv_2d.forward(x)
+print(A)
 
-#w = w[:,np.newaxis,:,:]
-N,C,H,W = x.shape
-F,C,FH,FW = w.shape
-S = 1
-P = 1
-#w = np.ones([F,C,FH,FW])
-b = np.ones((C,F))
-print("x shape:", x.shape)
-print("w shape", w.shape)
-#print(w)
+#da = np.array([[[[ -4,  -4], [ 10,  11]],[[  1,  -7],[  1, -11]]]])
+delta = np.array([[[[ -4,  -4],
+                   [ 10,  11]],
 
-OH,OW = output_shape2d(H,W,P,P,FH,FW,S,S)
-X_pad = np.pad(x,((0,0),(0,0),(P,P),(P,P)))
-print("x pad:", X_pad)
-#### forward ####
-A = np.zeros([N,C,OH,OW])
-for n in range(N):
-    for ch in range(C):
-        for row in range(0,H,S):
-            for col in range(0,W,S):
-                A[n,ch,row,col] = np.sum(X_pad[n,:,row:row+FH, col:col+FW] * w[:,ch,:,:]) + b[ch]
-print("A shape:",A.shape)
-print("A:", A)
-print("X_pad shape:", X_pad.shape)
-#### Backward
-
-
-dA = np.ones(A.shape)
-dZ = np.zeros(X_pad.shape)
-dw = np.zeros(w.shape)
-db = np.zeros(b.shape)
-
-# dZ batch
-for n in range(N):
-    for ch in range(C):
-        for row in range(0,H,S):
-            for col in range(0,W,S):
-                dZ[n,:,row:row+FH, col:col+FW] += dA[n,ch,row,col]*w[:,ch,:,:]
-
-
-d1_rows = range(P), range(H+P, H+2*P,1)
-d1_cols = range(P), range(W+P, W+2*P,1)
-
-dZ = np.delete(dZ, d1_rows, axis =2)
-dZ = np.delete(dZ,d1_cols, axis = 3)
-
-# dW Batch
-for n in range(N):
-    for ch in range(C):
-        for row in range(OH):
-            for col in range(OW):
-                w[:,ch,:,:] += dA[n,ch,row,col]*X_pad[n,:,row:row+FH, col:col+FW]
-        
-# dB Out channel
-
-for ch in range(C):
-    db[ch] = np.sum(dA[:,ch,:,:])
-        
-print("dZ:",dZ)
-print("dW:", dw)
-print("db:", db)
+                  [[  1,  -7],
+                   [  1, -11]]]])
+dZ = simple_conv_2d.backward(delta,True)
+print(dZ)
 
 ################ Problem 4 test ##################
 test_data = np.random.randint(0,9,36).reshape(1,1,6,6)
