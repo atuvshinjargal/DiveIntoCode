@@ -7,8 +7,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
+import tensorflow as tf
 
-np.seterr(divide='ignore', invalid='ignore')
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True))
 
 class FC():
     """
@@ -512,7 +514,7 @@ pool_forward = avgpooling.forward(test_data)
 print("test data:", test_data)
 print("Avgpooling forward:", pool_forward)
 ################ Problem 6 test ##################
-test_data = np.zeros([10,2,5,5])
+test_data = np.zeros([10,2,3,3])
 flat = Flatten()
 flat_forward = flat.forward(test_data)
 flat_backward = flat.backward(flat_forward)
@@ -539,8 +541,7 @@ NN = {0:FC(7840, 200, HeInitializer(), AdaGrad(0.01), ReLU()),
 CNN = {0: SimpleConv2d(F=10, C=1,FH=3,FW=3,P=1,S=1,
             initializer=SimpleInitializerConv2d(0.01), optimizer=SGD(0.1), activation=ReLU()),}
 
-cnn2d = Scratch2dCNNClassifier(NN=NN, CNN=CNN, n_epoch=1, n_batch=20, verbose = True)
-cnn2d.fit(X_train[0:1000], y_train_one_hot[0:1000])
+cnn2d = Scratch2dCNNClassifier(NN=NN, CNN=CNN, n_epoch=10, n_batch=200, verbose = True)
 
 y_pred = cnn2d.predict(X_val[0:500])
 acc = accuracy_score(y_val[0:500], y_pred)
@@ -593,3 +594,4 @@ print("Stride: 2")
 print("Padding: None")
 print("Number of parameter: 1820")
 print("output size: 9x9x20")
+
